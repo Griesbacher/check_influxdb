@@ -26,3 +26,7 @@ _testmain.go
 #IDE Files
 *.iml
 *.idea
+
+#Testfiles
+influx
+check_influxdb
