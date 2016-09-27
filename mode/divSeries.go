@@ -66,7 +66,10 @@ SELECT last(*) FROM "database" WHERE "database" =~ /%s/ AND time < now() - %dm G
 		data := map[string][]float64{}
 		for _, s := range response.Results[index].Series {
 			data[s.Tags["database"]] = []float64{}
-			for _, i := range []int{2, 1} {
+			for _, i := range []int{
+				helper.SliceIndex(len(s.Columns), func(i int) bool { return s.Columns[i] == "last_numMeasurements" }),
+				helper.SliceIndex(len(s.Columns), func(i int) bool { return s.Columns[i] == "last_numSeries" }),
+			} {
 				f, err := s.Values[0][i].(json.Number).Float64()
 				if err != nil {
 					return data, err

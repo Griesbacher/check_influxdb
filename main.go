@@ -123,12 +123,12 @@ func main() {
 						flagFilter,
 						cli.StringFlag{
 							Name:        "w",
-							Usage:       "warning: series,measurements",
+							Usage:       "warning: measurements,series (only measurements: 10, only series: ,10)",
 							Destination: &warning,
 						},
 						cli.StringFlag{
 							Name:        "c",
-							Usage:       "critical: series,measurements",
+							Usage:       "critical: measurements,series (only measurements: 10, only series: ,10)",
 							Destination: &critical,
 						},
 					},
@@ -146,12 +146,12 @@ func main() {
 						flagFilter,
 						cli.StringFlag{
 							Name:        "w",
-							Usage:       "warning: series,measurements",
+							Usage:       "warning: measurements,series (only measurements: 10, only series: ,10)",
 							Destination: &warning,
 						},
 						cli.StringFlag{
 							Name:        "c",
-							Usage:       "critical: series,measurements",
+							Usage:       "critical: measurements,series (only measurements: 10, only series: ,10)",
 							Destination: &critical,
 						},
 						cli.IntFlag{
