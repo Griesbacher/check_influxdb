@@ -17,6 +17,8 @@ var (
 	warning     string
 	critical    string
 	filterRegex string
+	timerange   int
+	livestatus  string
 )
 
 func startTimeout() {
@@ -46,7 +48,11 @@ func main() {
 		Destination: &password,
 		Value:       "root",
 	}
-
+	flagFilter := cli.StringFlag{
+		Name:        "filter",
+		Usage:       "regex to filter databases",
+		Destination: &filterRegex,
+	}
 	app.Commands = []cli.Command{
 		{
 			Name:    "mode",
@@ -55,7 +61,7 @@ func main() {
 			Subcommands: []cli.Command{
 				{
 					Name:  "ping",
-					Usage: "tests if the influxdb is alive",
+					Usage: "Tests if the influxdb is alive",
 					Action: func(c *cli.Context) error {
 						startTimeout()
 						return mode.Ping(address, username, password, warning, critical)
@@ -79,12 +85,13 @@ func main() {
 					},
 				}, {
 					Name:  "disk",
-					Usage: "checks the disk size per databases",
+					Usage: "Checks the disk size per databases",
 					Action: func(c *cli.Context) error {
 						startTimeout()
 						return mode.Disk(path, warning, critical, filterRegex)
 					},
 					Flags: []cli.Flag{
+						flagFilter,
 						cli.StringFlag{
 							Name:        "w",
 							Usage:       "warning: size in bytes",
@@ -101,15 +108,10 @@ func main() {
 							Destination: &path,
 							Value:       "/var/lib/influxdb",
 						},
-						cli.StringFlag{
-							Name:        "filter",
-							Usage:       "regex to filter databases",
-							Destination: &filterRegex,
-						},
 					},
 				}, {
 					Name:  "num_series",
-					Usage: "the numbers of series/measurements",
+					Usage: "The numbers of series/measurements",
 					Action: func(c *cli.Context) error {
 						startTimeout()
 						return mode.NumSeries(address, username, password, warning, critical, filterRegex)
@@ -118,6 +120,7 @@ func main() {
 						flagAddress,
 						flagUsername,
 						flagPassword,
+						flagFilter,
 						cli.StringFlag{
 							Name:        "w",
 							Usage:       "warning: series,measurements",
@@ -128,10 +131,39 @@ func main() {
 							Usage:       "critical: series,measurements",
 							Destination: &critical,
 						},
+					},
+				}, {
+					Name:  "div_series",
+					Usage: "The diverence of series/measurements between now and x minutes. If a livestatus address is given, the overall state will switch to Warning if a core restart happend and due to that the metric got into Critical.",
+					Action: func(c *cli.Context) error {
+						startTimeout()
+						return mode.DivSeries(address, username, password, warning, critical, filterRegex, livestatus, timerange)
+					},
+					Flags: []cli.Flag{
+						flagAddress,
+						flagUsername,
+						flagPassword,
+						flagFilter,
 						cli.StringFlag{
-							Name:        "filter",
-							Usage:       "regex to filter databases",
-							Destination: &filterRegex,
+							Name:        "w",
+							Usage:       "warning: series,measurements",
+							Destination: &warning,
+						},
+						cli.StringFlag{
+							Name:        "c",
+							Usage:       "critical: series,measurements",
+							Destination: &critical,
+						},
+						cli.IntFlag{
+							Name:        "m",
+							Usage:       "amount of minutes to look back",
+							Destination: &timerange,
+							Value:       60,
+						},
+						cli.StringFlag{
+							Name:        "l",
+							Usage:       `livestatus address ("unix:/var/lib/nagios/rw/" or "tcp:localhost:6557")`,
+							Destination: &livestatus,
 						},
 					},
 				},
