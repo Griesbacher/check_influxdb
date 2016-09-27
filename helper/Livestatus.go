@@ -12,7 +12,7 @@ import (
 
 const (
 	TYPE_UNIX = "unix"
-	TYPE_TCP  = "tcp"
+	TYPE_TCP = "tcp"
 )
 
 var UnsupportedProtocolError = errors.New("This protocol is not supported")
@@ -35,14 +35,12 @@ func NewLivestatus(address string) (*Livestatus, error) {
 
 //Queries livestatus and returns an list of list outer list are lines inner elements within the line.
 func (l Livestatus) Query(query string) (*[][]string, error) {
-	var conn net.Conn
-	switch l.connectionType {
-	case "tcp":
-		conn, _ = net.Dial(TYPE_TCP, l.address)
-	case "file":
-		conn, _ = net.Dial(TYPE_UNIX, l.address)
+	conn, err := net.Dial(l.connectionType, l.address)
+	if err != nil {
+		return nil, err
 	}
 	defer conn.Close()
+
 	fmt.Fprintf(conn, query)
 	reader := bufio.NewReader(conn)
 
