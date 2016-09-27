@@ -8,6 +8,7 @@ import (
 	"github.com/griesbacher/check_x"
 	"github.com/influxdata/influxdb/client/v2"
 	"strconv"
+	"sort"
 )
 
 func NumSeries(address, username, password, warning, critical, filterRegex string) (err error) {
@@ -57,8 +58,14 @@ func NumSeries(address, username, password, warning, critical, filterRegex strin
 	var okPrint bytes.Buffer
 	var warnPrint bytes.Buffer
 	var critPrint bytes.Buffer
-	for database, values := range data {
-		for i, v := range values {
+
+	var keys []string
+	for k := range data {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, database := range keys {
+		for i, v := range data[database] {
 			var w *check_x.Threshold
 			var c *check_x.Threshold
 			if len((*thresholds)["warning"])-1 >= i {

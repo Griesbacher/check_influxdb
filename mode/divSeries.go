@@ -10,6 +10,7 @@ import (
 	"github.com/influxdata/influxdb/client/v2"
 	"strconv"
 	"time"
+	"sort"
 )
 
 func DivSeries(address, username, password, warning, critical, filterRegex, livestatus string, timerange int) (err error) {
@@ -104,8 +105,14 @@ SELECT last(*) FROM "database" WHERE "database" =~ /%s/ AND time < now() - %dm G
 	var okPrint bytes.Buffer
 	var warnPrint bytes.Buffer
 	var critPrint bytes.Buffer
-	for database, values := range dataDiv {
-		for i, v := range values {
+
+	var keys []string
+	for k := range dataDiv {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, database := range keys {
+		for i, v := range dataDiv[database] {
 			var w *check_x.Threshold
 			var c *check_x.Threshold
 			if len((*thresholds)["warning"])-1 >= i {
