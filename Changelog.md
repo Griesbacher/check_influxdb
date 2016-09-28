@@ -1,3 +1,7 @@
+# 0.0.3 - 28.09.2016
+## Features:
+- old series mode: lists all forgotten series
+
 # 0.0.2 - 28.09.2016
 ## Features:
 - ReadWrite mode - checks the bytes per second on read and write
