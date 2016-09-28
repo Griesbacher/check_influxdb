@@ -13,6 +13,7 @@ import (
 	"sort"
 )
 
+//DivSeries calculates the div of series and measurements between now and x min
 func DivSeries(address, username, password, warning, critical, filterRegex, livestatus string, timerange int) (err error) {
 	thresholds, err := helper.ParseCommaThresholds(warning, critical)
 	if err != nil {

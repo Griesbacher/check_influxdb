@@ -11,6 +11,7 @@ import (
 	"sort"
 )
 
+//NumSeries checks the amount of series and measurements
 func NumSeries(address, username, password, warning, critical, filterRegex string) (err error) {
 	thresholds, err := helper.ParseCommaThresholds(warning, critical)
 	if err != nil {
