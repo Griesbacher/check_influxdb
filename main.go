@@ -166,6 +166,58 @@ func main() {
 							Destination: &livestatus,
 						},
 					},
+				}, {
+					Name:  "read_write",
+					Usage: "Checks the bytes read and written the last x minutes",
+					Action: func(c *cli.Context) error {
+						startTimeout()
+						return mode.ReadWrite(address, username, password, warning, critical, timerange)
+					},
+					Flags: []cli.Flag{
+						flagAddress,
+						flagUsername,
+						flagPassword,
+						flagFilter,
+						cli.StringFlag{
+							Name:        "w",
+							Usage:       "warning: read,write Bps (only read: 10, only write: ,10)",
+							Destination: &warning,
+						},
+						cli.StringFlag{
+							Name:        "c",
+							Usage:       "critical: read,write Bps (only read: 10, only write: ,10)",
+							Destination: &critical,
+						},
+						cli.IntFlag{
+							Name:        "m",
+							Usage:       "amount of minutes to look back",
+							Destination: &timerange,
+							Value:       1,
+						},
+					},
+				},{
+					Name:  "memory",
+					Usage: "RSS in Byte",
+					Action: func(c *cli.Context) error {
+						startTimeout()
+						return mode.Memory(address, username, password, warning, critical)
+					},
+					Flags: []cli.Flag{
+						flagAddress,
+						flagUsername,
+						flagPassword,
+						flagFilter,
+						cli.StringFlag{
+							Name:        "w",
+							Usage:       "warning in B",
+							Destination: &warning,
+						},
+						cli.StringFlag{
+							Name:        "c",
+							Usage:       "critical in B",
+							Destination: &critical,
+						},
+					},
 				},
 			},
 		},
