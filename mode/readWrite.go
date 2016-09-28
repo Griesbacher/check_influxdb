@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/griesbacher/check_influxdb/helper"
 	"github.com/griesbacher/check_x"
-	"github.com/influxdata/influxdb/client/v2"
 	"github.com/griesbacher/check_x/Units"
+	"github.com/influxdata/influxdb/client/v2"
 )
 
 //ReadWrite checks the bytes read and written the last x minutes
@@ -53,10 +53,10 @@ last("writeReqBytes") / ( %d * 60 ) - first("writeReqBytes") / ( %d * 60 ) FROM 
 	for i, v := range []float64{read, write} {
 		var w *check_x.Threshold
 		var c *check_x.Threshold
-		if len((*thresholds)["warning"]) - 1 >= i {
+		if len((*thresholds)["warning"])-1 >= i {
 			w = (*thresholds)["warning"][i]
 		}
-		if len((*thresholds)["critical"]) - 1 >= i {
+		if len((*thresholds)["critical"])-1 >= i {
 			c = (*thresholds)["critical"][i]
 		}
 		state := check_x.Evaluator{Warning: w, Critical: c}.Evaluate(v)

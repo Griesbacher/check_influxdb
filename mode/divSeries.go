@@ -8,9 +8,9 @@ import (
 	"github.com/griesbacher/check_influxdb/helper"
 	"github.com/griesbacher/check_x"
 	"github.com/influxdata/influxdb/client/v2"
+	"sort"
 	"strconv"
 	"time"
-	"sort"
 )
 
 //DivSeries calculates the div of series and measurements between now and x min

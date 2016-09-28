@@ -12,7 +12,7 @@ import (
 
 const (
 	TYPE_UNIX = "unix"
-	TYPE_TCP = "tcp"
+	TYPE_TCP  = "tcp"
 )
 
 var UnsupportedProtocolError = errors.New("This protocol is not supported")

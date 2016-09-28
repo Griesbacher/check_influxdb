@@ -18,12 +18,12 @@ type Threshold struct {
 }
 
 var (
-	regexDigit = `(-?\d+(\.\d+)?)`
-	regexOutsideZeroToX = regexp.MustCompile(fmt.Sprintf(`^%s$`, regexDigit))
-	regexOutsideXToInf = regexp.MustCompile(fmt.Sprintf(`^%s:$`, regexDigit))
+	regexDigit              = `(-?\d+(\.\d+)?)`
+	regexOutsideZeroToX     = regexp.MustCompile(fmt.Sprintf(`^%s$`, regexDigit))
+	regexOutsideXToInf      = regexp.MustCompile(fmt.Sprintf(`^%s:$`, regexDigit))
 	regexOutsideMinusInfToX = regexp.MustCompile(fmt.Sprintf(`^~:%s$`, regexDigit))
-	regexInsideOutsideXToY = regexp.MustCompile(fmt.Sprintf(`^(@?)%s:%s$`, regexDigit, regexDigit))
-	minFloat64 = float64(math.MinInt64)
+	regexInsideOutsideXToY  = regexp.MustCompile(fmt.Sprintf(`^(@?)%s:%s$`, regexDigit, regexDigit))
+	minFloat64              = float64(math.MinInt64)
 	//FirstBiggerThenSecondError this error is thrown when the first number is bigger then the second
 	FirstBiggerThenSecondError = errors.New("First argument is bigger then second")
 )

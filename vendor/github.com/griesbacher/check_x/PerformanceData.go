@@ -21,7 +21,7 @@ func NewPerformanceData(label string, value float64) *PerformanceData {
 func NewPerformanceDataString(label, value string) *PerformanceData {
 	p_mutex.Lock()
 	p = append(p, PerformanceData{"label": label, "value": value})
-	newOne := &(p[len(p) - 1])
+	newOne := &(p[len(p)-1])
 	p_mutex.Unlock()
 	return newOne
 }

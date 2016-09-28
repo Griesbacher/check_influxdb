@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/griesbacher/check_x"
-	"github.com/influxdata/influxdb/client/v2"
 	"github.com/griesbacher/check_x/Units"
+	"github.com/influxdata/influxdb/client/v2"
 )
 
 //Memory will check the RSS usage

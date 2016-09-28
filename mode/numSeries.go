@@ -7,8 +7,8 @@ import (
 	"github.com/griesbacher/check_influxdb/helper"
 	"github.com/griesbacher/check_x"
 	"github.com/influxdata/influxdb/client/v2"
-	"strconv"
 	"sort"
+	"strconv"
 )
 
 //NumSeries checks the amount of series and measurements
