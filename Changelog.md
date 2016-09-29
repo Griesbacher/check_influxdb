@@ -1,3 +1,8 @@
+# 0.0.4 - 
+## Fixes:
+- Memory mode: removed necessary database flag
+- ReadWrite mode: added ops to read and write
+
 # 0.0.3 - 28.09.2016
 ## Features:
 - old series mode: lists all forgotten series

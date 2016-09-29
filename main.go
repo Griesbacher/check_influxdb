@@ -180,19 +180,19 @@ func main() {
 						flagPassword,
 						cli.StringFlag{
 							Name:        "w",
-							Usage:       "warning: read,write Bps (only read: 10, only write: ,10)",
+							Usage:       "warning: read(Bps),read(Ops),write(Bps),read(Ops) (only read: 10,10 only write: ,,10,10)",
 							Destination: &warning,
 						},
 						cli.StringFlag{
 							Name:        "c",
-							Usage:       "critical: read,write Bps (only read: 10, only write: ,10)",
+							Usage:       "critical: read(Bps),read(Ops),write(Bps),read(Ops) (only read: 10,10 only write: ,,10,10)",
 							Destination: &critical,
 						},
 						cli.IntFlag{
 							Name:        "m",
 							Usage:       "amount of minutes to look back",
 							Destination: &timerange,
-							Value:       1,
+							Value:       10,
 						},
 					},
 				}, {

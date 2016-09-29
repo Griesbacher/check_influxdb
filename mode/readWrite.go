@@ -1,6 +1,7 @@
 package mode
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/griesbacher/check_influxdb/helper"
@@ -22,10 +23,15 @@ func ReadWrite(address, username, password, warning, critical string, timerange 
 	}
 	defer c.Close()
 
+	timerangeInSeconds := timerange * 60
 	q := client.NewQuery(
-		fmt.Sprintf(`SELECT last("queryRespBytes") / ( %d * 60 ) - first("queryRespBytes") / ( %d * 60 ),
-last("writeReqBytes") / ( %d * 60 ) - first("writeReqBytes") / ( %d * 60 ) FROM "httpd" where time > now() - %dm;`,
-			timerange, timerange, timerange, timerange, timerange),
+		fmt.Sprintf(`SELECT
+( last("queryRespBytes") - first("queryRespBytes") ) / %d,
+( last("queryReq") - first("queryReq") ) / %d,
+( last("writeReqBytes") - first("writeReqBytes") ) / %d,
+( last("writeReq") - first("writeReq") ) / %d
+FROM "httpd" where time > now() - %dm;`,
+			timerangeInSeconds, timerangeInSeconds, timerangeInSeconds, timerangeInSeconds, timerange),
 		"_internal", "s")
 	response, err := c.Query(q)
 	if err != nil {
@@ -34,23 +40,22 @@ last("writeReqBytes") / ( %d * 60 ) - first("writeReqBytes") / ( %d * 60 ) FROM 
 		return response.Error()
 	}
 
-	var write float64
-	var read float64
+	data := make([]float64, 4)
 	for _, r := range response.Results {
 		for _, s := range r.Series {
-			read, err = s.Values[0][1].(json.Number).Float64()
-			if err != nil {
-				return err
-			}
-			write, err = s.Values[0][2].(json.Number).Float64()
-			if err != nil {
-				return err
+			for i := range data {
+				d, err := s.Values[0][i+1].(json.Number).Float64()
+				if err != nil {
+					return err
+				}
+				data[i] = d
 			}
 		}
 	}
 
+	var toPrint bytes.Buffer
 	states := check_x.States{}
-	for i, v := range []float64{read, write} {
+	for i, v := range data {
 		var w *check_x.Threshold
 		var c *check_x.Threshold
 		if len((*thresholds)["warning"])-1 >= i {
@@ -61,17 +66,30 @@ last("writeReqBytes") / ( %d * 60 ) - first("writeReqBytes") / ( %d * 60 ) FROM 
 		}
 		state := check_x.Evaluator{Warning: w, Critical: c}.Evaluate(v)
 		states = append(states, state)
-		var typ string
-		if typ = "write"; i == 0 {
-			typ = "read"
+		switch i {
+		case 0:
+			typ := "read_data"
+			toPrint.WriteString(fmt.Sprintf("%s: %sps ", typ, Units.ByteSize(v)))
+			check_x.NewPerformanceData(typ, v).Unit("Bps").Warn(w).Crit(c)
+		case 1:
+			typ := "read_ops"
+			toPrint.WriteString(fmt.Sprintf("%s: %0.3fops ", typ, v))
+			check_x.NewPerformanceData(typ, v).Unit("ops").Warn(w).Crit(c)
+		case 2:
+			typ := "write_data"
+			toPrint.WriteString(fmt.Sprintf("%s: %sps ", typ, Units.ByteSize(v)))
+			check_x.NewPerformanceData(typ, v).Unit("Bps").Warn(w).Crit(c)
+		case 3:
+			typ := "write_ops"
+			toPrint.WriteString(fmt.Sprintf("%s: %0.3fops ", typ, v))
+			check_x.NewPerformanceData(typ, v).Unit("ops").Warn(w).Crit(c)
 		}
-		check_x.NewPerformanceData(typ, v).Unit("Bps").Warn(w).Crit(c)
 	}
 
 	worst, err := states.GetWorst()
 	if err != nil {
 		return
 	}
-	check_x.Exit(*worst, fmt.Sprintf("Read: %sps Write: %sps", Units.ByteSize(read), Units.ByteSize(write)))
+	check_x.Exit(*worst, toPrint.String())
 	return
 }
