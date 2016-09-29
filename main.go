@@ -206,7 +206,6 @@ func main() {
 						flagAddress,
 						flagUsername,
 						flagPassword,
-						flagFilter,
 						cli.StringFlag{
 							Name:        "w",
 							Usage:       "warning in B",
@@ -230,16 +229,6 @@ func main() {
 						flagUsername,
 						flagPassword,
 						cli.StringFlag{
-							Name:        "w",
-							Usage:       "warning in hours",
-							Destination: &warning,
-						},
-						cli.StringFlag{
-							Name:        "c",
-							Usage:       "critical in hours",
-							Destination: &critical,
-						},
-						cli.StringFlag{
 							Name:        "database",
 							Usage:       "Database to use",
 							Destination: &database,
@@ -250,6 +239,16 @@ func main() {
 							Usage:       "amount of hours",
 							Destination: &timerange,
 							Value:       24,
+						},
+						cli.StringFlag{
+							Name:        "w",
+							Usage:       "warning in hours",
+							Destination: &warning,
+						},
+						cli.StringFlag{
+							Name:        "c",
+							Usage:       "critical in hours",
+							Destination: &critical,
 						},
 					},
 				},
