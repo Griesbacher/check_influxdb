@@ -32,7 +32,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "check_influxdb"
 	app.Usage = "Checks different influxdb stats\n   Copyright (c) 2016 Philip Griesbacher"
-	app.Version = "0.0.3"
+	app.Version = "0.0.4"
 	flagAddress := cli.StringFlag{
 		Name:        "address",
 		Usage:       "InfluxDB address: Protocol + IP + Port",
@@ -135,7 +135,7 @@ func main() {
 					},
 				}, {
 					Name:  "div_series",
-					Usage: "The diverence of series/measurements between now and x minutes. If a livestatus address is given, the overall state will switch to Warning if a core restart happend and due to that the metric got into Critical.",
+					Usage: "The diverence of series/measurements between now and x minutes. If a livestatus address is given, the overall state will switch to Warning if a core restart happened and due to that the metric got into Critical.",
 					Action: func(c *cli.Context) error {
 						startTimeout()
 						return mode.DivSeries(address, username, password, warning, critical, filterRegex, livestatus, timerange)
@@ -258,7 +258,7 @@ func main() {
 	app.Flags = []cli.Flag{
 		cli.IntFlag{
 			Name:        "t",
-			Usage:       "Seconds till check returns unkown, 0 to disable",
+			Usage:       "Seconds till check returns unknown, 0 to disable",
 			Value:       10,
 			Destination: &timeout,
 		},
