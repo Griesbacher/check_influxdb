@@ -169,7 +169,7 @@ func main() {
 					},
 				}, {
 					Name:  "read_write",
-					Usage: "Checks the bytes read and written the last x minutes",
+					Usage: "Checks the bytes/operations read and written the last x minutes",
 					Action: func(c *cli.Context) error {
 						startTimeout()
 						return mode.ReadWrite(address, username, password, warning, critical, timerange)
