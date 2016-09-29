@@ -14,7 +14,7 @@ USAGE:
    main.exe [global options] command [command options] [arguments...]
 
 VERSION:
-   0.0.3
+   0.0.4
 
 COMMANDS:
      mode, m  check mode
@@ -40,8 +40,8 @@ COMMANDS:
      ping        Tests if the influxdb is alive
      disk        Checks the disk size per databases
      num_series  The numbers of series/measurements
-     div_series  The diverence of series/measurements between now and x minutes. If a livestatus address is given, the overall state will switch to Warning if a core restart happend and due to that the metric got into Critical.
-     read_write  Checks the bytes read and written the last x minutes
+     div_series  The diverence of series/measurements between now and x minutes. If a livestatus address is given, the overall state will switch to Warning if a core restart happened and due to that the metric got into Critical.
+     read_write  Checks the bytes/operations read and written the last x minutes
      memory      RSS in Byte
      old_series  Returns a list of series older then x hours. This check makes only sense when the databases hast the tags: hostname and service - it's build for nagflux
 

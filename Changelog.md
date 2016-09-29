@@ -1,4 +1,4 @@
-# 0.0.4 - 
+# 0.0.4 - 29.09.2016
 ## Fixes:
 - Memory mode: removed necessary database flag
 - ReadWrite mode: added ops to read and write
