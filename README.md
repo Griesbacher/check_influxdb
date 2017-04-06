@@ -1,6 +1,6 @@
 [![Circle CI](https://circleci.com/gh/Griesbacher/check_influxdb/tree/master.svg?style=svg)](https://circleci.com/gh/Griesbacher/check_influxdb/tree/master)
 # check_influxdb
-Monitoring Plugin to check the health of an InfluxDB
+Monitoring Plugin to check the health of an InfluxDB and data
 
 ## Usage
 ### Global Options
@@ -14,7 +14,7 @@ USAGE:
    main.exe [global options] command [command options] [arguments...]
 
 VERSION:
-   0.0.4
+   0.0.5
 
 COMMANDS:
      mode, m  check mode
@@ -44,7 +44,8 @@ COMMANDS:
      read_write  Checks the bytes/operations read and written the last x minutes
      memory      RSS in Byte
      old_series  Returns a list of series older then x hours. This check makes only sense when the databases hast the tags: hostname and service - it's build for nagflux
-
+     query       You could check a certain value from the database, but your query has to return only ONE value. Like 'select last(value) from metrics'
+     
 OPTIONS:
    --help, -h  show help
 ```

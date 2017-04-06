@@ -20,6 +20,8 @@ var (
 	timerange   int
 	livestatus  string
 	database    string
+	query       string
+	alias       string
 )
 
 func startTimeout() {
@@ -32,7 +34,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "check_influxdb"
 	app.Usage = "Checks different influxdb stats\n   Copyright (c) 2016 Philip Griesbacher"
-	app.Version = "0.0.4"
+	app.Version = "0.0.5"
 	flagAddress := cli.StringFlag{
 		Name:        "address",
 		Usage:       "InfluxDB address: Protocol + IP + Port",
@@ -249,6 +251,44 @@ func main() {
 							Name:        "c",
 							Usage:       "critical in hours",
 							Destination: &critical,
+						},
+					},
+				}, {
+					Name:  "query",
+					Usage: "You could check a certain value from the database, but your query has to return only ONE value. Like 'select last(value) from metrics'",
+					Action: func(c *cli.Context) error {
+						startTimeout()
+						return mode.Query(address, database, username, password, warning, critical, query, alias)
+					},
+					Flags: []cli.Flag{
+						flagAddress,
+						flagUsername,
+						flagPassword,
+						cli.StringFlag{
+							Name:        "database",
+							Usage:       "Database to use",
+							Destination: &database,
+							Value:       "nagflux",
+						},
+						cli.StringFlag{
+							Name:        "q",
+							Usage:       "query to be executed",
+							Destination: &query,
+						},
+						cli.StringFlag{
+							Name:        "w",
+							Usage:       "warning value",
+							Destination: &warning,
+						},
+						cli.StringFlag{
+							Name:        "c",
+							Usage:       "critical value",
+							Destination: &critical,
+						},
+						cli.StringFlag{
+							Name:        "a",
+							Usage:       "alias, will replace the query within the output, if set",
+							Destination: &alias,
 						},
 					},
 				},
