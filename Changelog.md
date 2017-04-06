@@ -1,3 +1,7 @@
+# 0.0.5 - 06.04.2017
+## Features:
+- Query mode - allows to check a single value from the database
+
 # 0.0.4 - 29.09.2016
 ## Fixes:
 - Memory mode: removed necessary database flag

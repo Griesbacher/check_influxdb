@@ -9,6 +9,7 @@ $ go run main.go -h
 NAME:
    check_influxdb - Checks different influxdb stats
    Copyright (c) 2016 Philip Griesbacher
+   https://github.com/Griesbacher/check_influxdb
 
 USAGE:
    main.exe [global options] command [command options] [arguments...]

@@ -33,7 +33,7 @@ func startTimeout() {
 func main() {
 	app := cli.NewApp()
 	app.Name = "check_influxdb"
-	app.Usage = "Checks different influxdb stats\n   Copyright (c) 2016 Philip Griesbacher"
+	app.Usage = "Checks different influxdb stats\n   Copyright (c) 2016 Philip Griesbacher\n   https://github.com/Griesbacher/check_influxdb"
 	app.Version = "0.0.5"
 	flagAddress := cli.StringFlag{
 		Name:        "address",
