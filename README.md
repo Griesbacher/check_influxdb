@@ -54,7 +54,7 @@ OPTIONS:
 ### Subcommand options
 
 ```
-$ check_influxdb mode ping -h
+$ go run main.go mode ping -h
 NAME:
    check_influxdb mode ping - Tests if the influxdb is alive
 
