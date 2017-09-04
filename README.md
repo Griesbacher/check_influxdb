@@ -50,3 +50,22 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
+
+### Subcommand options
+
+```
+$ check_influxdb mode ping -h
+NAME:
+   check_influxdb mode ping - Tests if the influxdb is alive
+
+USAGE:
+   check_influxdb mode ping [command options] [arguments...]
+
+OPTIONS:
+   --address value   InfluxDB address: Protocol + IP + Port (default: "http://localhost:8086")
+   --username value  (default: "root")
+   --password value  (default: "root")
+   -w value          warning: request duration in ms (default: "200")
+   -c value          critical: request duration in ms (default: "400")
+
+```
