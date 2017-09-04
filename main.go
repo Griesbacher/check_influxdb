@@ -22,6 +22,7 @@ var (
 	database    string
 	query       string
 	alias       string
+	unknown2ok  bool
 )
 
 func startTimeout() {
@@ -258,7 +259,7 @@ func main() {
 					Usage: "You could check a certain value from the database, but your query has to return only ONE value. Like 'select last(value) from metrics'",
 					Action: func(c *cli.Context) error {
 						startTimeout()
-						return mode.Query(address, database, username, password, warning, critical, query, alias)
+						return mode.Query(address, database, username, password, warning, critical, query, alias, unknown2ok)
 					},
 					Flags: []cli.Flag{
 						flagAddress,
@@ -289,6 +290,11 @@ func main() {
 							Name:        "a",
 							Usage:       "alias, will replace the query within the output, if set",
 							Destination: &alias,
+						},
+						cli.BoolFlag{
+							Name:        "unknown2ok",
+							Usage:       "If this flag is set, a query which would return unknown will now return ok (Default: false)",
+							Destination: &unknown2ok,
 						},
 					},
 				},

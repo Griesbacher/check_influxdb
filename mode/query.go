@@ -9,7 +9,7 @@ import (
 )
 
 //Query will execute the given query and evaluate the result
-func Query(address, database, username, password, warning, critical, query, alias string) (err error) {
+func Query(address, database, username, password, warning, critical, query, alias string, unknown2ok bool) (err error) {
 	warn, err := check_x.NewThreshold(warning)
 	if err != nil {
 		return
@@ -33,17 +33,23 @@ func Query(address, database, username, password, warning, critical, query, alia
 	} else if response.Error() != nil {
 		return response.Error()
 	}
+
+	errorReturnCode := check_x.Unknown
+	if unknown2ok {
+		errorReturnCode = check_x.OK
+	}
+
 	if len(response.Results) != 1 {
-		check_x.Exit(check_x.Unknown, fmt.Sprintf("The amount of results is not 1 it is: %d", len(response.Results)))
+		check_x.Exit(errorReturnCode, fmt.Sprintf("The amount of results is not 1 it is: %d", len(response.Results)))
 	}
 	if len(response.Results[0].Series) != 1 {
-		check_x.Exit(check_x.Unknown, fmt.Sprintf("The amount of series is not 1 it is: %d", len(response.Results[0].Series)))
+		check_x.Exit(errorReturnCode, fmt.Sprintf("The amount of series is not 1 it is: %d", len(response.Results[0].Series)))
 	}
 	if len(response.Results[0].Series[0].Values) != 1 {
-		check_x.Exit(check_x.Unknown, fmt.Sprintf("The amount of lines is not 1 it is: %d", len(response.Results[0].Series[0].Values)))
+		check_x.Exit(errorReturnCode, fmt.Sprintf("The amount of lines is not 1 it is: %d", len(response.Results[0].Series[0].Values)))
 	}
 	if len(response.Results[0].Series[0].Values[0]) != 2 {
-		check_x.Exit(check_x.Unknown, fmt.Sprintf("The amount of fields is not 2 it is: %d", len(response.Results[0].Series[0].Values[0])))
+		check_x.Exit(errorReturnCode, fmt.Sprintf("The amount of fields is not 2 it is: %d", len(response.Results[0].Series[0].Values[0])))
 	}
 
 	var result float64
