@@ -8,7 +8,7 @@ import (
 )
 
 //Ping will be called on ping mode
-func Ping(address, username, password, warn, crit string) (err error) {
+func Ping(address, username, password string, insecureSkipVerify bool, warn, crit string) (err error) {
 	warning, err := check_x.NewThreshold(warn)
 	if err != nil {
 		return
@@ -19,7 +19,7 @@ func Ping(address, username, password, warn, crit string) (err error) {
 		return
 	}
 
-	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password})
+	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password, InsecureSkipVerify: insecureSkipVerify})
 	if err != nil {
 		return
 	}
