@@ -11,13 +11,13 @@ import (
 )
 
 //ReadWrite checks the bytes read and written the last x minutes
-func ReadWrite(address, username, password, warning, critical string, timerange int) (err error) {
+func ReadWrite(address, username, password string, insecureSkipVerify bool, warning, critical string, timerange int) (err error) {
 	thresholds, err := helper.ParseCommaThresholds(warning, critical)
 	if err != nil {
 		return
 	}
 
-	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password})
+	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password, InsecureSkipVerify: insecureSkipVerify})
 	if err != nil {
 		return
 	}

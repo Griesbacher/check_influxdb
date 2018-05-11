@@ -9,7 +9,7 @@ import (
 )
 
 //Query will execute the given query and evaluate the result
-func Query(address, database, username, password, warning, critical, query, alias string, unknown2ok bool) (err error) {
+func Query(address, database, username, password string, insecureSkipVerify bool, warning, critical, query, alias string, unknown2ok bool) (err error) {
 	warn, err := check_x.NewThreshold(warning)
 	if err != nil {
 		return
@@ -20,7 +20,7 @@ func Query(address, database, username, password, warning, critical, query, alia
 		return
 	}
 
-	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password})
+	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password, InsecureSkipVerify: insecureSkipVerify})
 	if err != nil {
 		return
 	}

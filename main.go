@@ -9,20 +9,21 @@ import (
 )
 
 var (
-	path        string
-	address     string
-	username    string
-	password    string
-	timeout     int
-	warning     string
-	critical    string
-	filterRegex string
-	timerange   int
-	livestatus  string
-	database    string
-	query       string
-	alias       string
-	unknown2ok  bool
+	path               string
+	address            string
+	username           string
+	password           string
+	insecureSkipVerify bool
+	timeout            int
+	warning            string
+	critical           string
+	filterRegex        string
+	timerange          int
+	livestatus         string
+	database           string
+	query              string
+	alias              string
+	unknown2ok         bool
 )
 
 func startTimeout() {
@@ -57,6 +58,10 @@ func main() {
 		Usage:       "regex to filter databases",
 		Destination: &filterRegex,
 	}
+	flagUnsafeSSL := cli.BoolFlag{
+		Name:        "unsafessl",
+		Destination: &insecureSkipVerify,
+	}
 	app.Commands = []cli.Command{
 		{
 			Name:    "mode",
@@ -68,12 +73,13 @@ func main() {
 					Usage: "Tests if the influxdb is alive",
 					Action: func(c *cli.Context) error {
 						startTimeout()
-						return mode.Ping(address, username, password, warning, critical)
+						return mode.Ping(address, username, password, insecureSkipVerify, warning, critical)
 					},
 					Flags: []cli.Flag{
 						flagAddress,
 						flagUsername,
 						flagPassword,
+						flagUnsafeSSL,
 						cli.StringFlag{
 							Name:        "w",
 							Usage:       "warning: request duration in ms",
@@ -118,12 +124,13 @@ func main() {
 					Usage: "The numbers of series/measurements",
 					Action: func(c *cli.Context) error {
 						startTimeout()
-						return mode.NumSeries(address, username, password, warning, critical, filterRegex)
+						return mode.NumSeries(address, username, password, insecureSkipVerify, warning, critical, filterRegex)
 					},
 					Flags: []cli.Flag{
 						flagAddress,
 						flagUsername,
 						flagPassword,
+						flagUnsafeSSL,
 						flagFilter,
 						cli.StringFlag{
 							Name:        "w",
@@ -141,12 +148,13 @@ func main() {
 					Usage: "The diverence of series/measurements between now and x minutes. If a livestatus address is given, the overall state will switch to Warning if a core restart happened and due to that the metric got into Critical.",
 					Action: func(c *cli.Context) error {
 						startTimeout()
-						return mode.DivSeries(address, username, password, warning, critical, filterRegex, livestatus, timerange)
+						return mode.DivSeries(address, username, password, insecureSkipVerify, warning, critical, filterRegex, livestatus, timerange)
 					},
 					Flags: []cli.Flag{
 						flagAddress,
 						flagUsername,
 						flagPassword,
+						flagUnsafeSSL,
 						flagFilter,
 						cli.StringFlag{
 							Name:        "w",
@@ -175,12 +183,13 @@ func main() {
 					Usage: "Checks the bytes/operations read and written the last x minutes",
 					Action: func(c *cli.Context) error {
 						startTimeout()
-						return mode.ReadWrite(address, username, password, warning, critical, timerange)
+						return mode.ReadWrite(address, username, password, insecureSkipVerify, warning, critical, timerange)
 					},
 					Flags: []cli.Flag{
 						flagAddress,
 						flagUsername,
 						flagPassword,
+						flagUnsafeSSL,
 						cli.StringFlag{
 							Name:        "w",
 							Usage:       "warning: read(Bps),read(Ops),write(Bps),read(Ops) (only read: 10,10 only write: ,,10,10)",
@@ -203,12 +212,13 @@ func main() {
 					Usage: "RSS in Byte",
 					Action: func(c *cli.Context) error {
 						startTimeout()
-						return mode.Memory(address, username, password, warning, critical)
+						return mode.Memory(address, username, password, insecureSkipVerify, warning, critical)
 					},
 					Flags: []cli.Flag{
 						flagAddress,
 						flagUsername,
 						flagPassword,
+						flagUnsafeSSL,
 						cli.StringFlag{
 							Name:        "w",
 							Usage:       "warning in B",
@@ -225,12 +235,13 @@ func main() {
 					Usage: "Returns a list of series older then x hours. This check makes only sense when the databases hast the tags: hostname and service - it's build for nagflux",
 					Action: func(c *cli.Context) error {
 						startTimeout()
-						return mode.OldSeries(address, database, username, password, warning, critical, timerange)
+						return mode.OldSeries(address, database, username, password, insecureSkipVerify, warning, critical, timerange)
 					},
 					Flags: []cli.Flag{
 						flagAddress,
 						flagUsername,
 						flagPassword,
+						flagUnsafeSSL,
 						cli.StringFlag{
 							Name:        "database",
 							Usage:       "Database to use",
@@ -259,12 +270,13 @@ func main() {
 					Usage: "You could check a certain value from the database, but your query has to return only ONE value. Like 'select last(value) from metrics'",
 					Action: func(c *cli.Context) error {
 						startTimeout()
-						return mode.Query(address, database, username, password, warning, critical, query, alias, unknown2ok)
+						return mode.Query(address, database, username, password, insecureSkipVerify, warning, critical, query, alias, unknown2ok)
 					},
 					Flags: []cli.Flag{
 						flagAddress,
 						flagUsername,
 						flagPassword,
+						flagUnsafeSSL,
 						cli.StringFlag{
 							Name:        "database",
 							Usage:       "Database to use",

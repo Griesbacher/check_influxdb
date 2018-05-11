@@ -14,7 +14,7 @@ import (
 )
 
 //DivSeries calculates the div of series and measurements between now and x min
-func DivSeries(address, username, password, warning, critical, filterRegex, livestatus string, timerange int) (err error) {
+func DivSeries(address, username, password string, insecureSkipVerify bool, warning, critical, filterRegex, livestatus string, timerange int) (err error) {
 	thresholds, err := helper.ParseCommaThresholds(warning, critical)
 	if err != nil {
 		return
@@ -42,7 +42,7 @@ func DivSeries(address, username, password, warning, critical, filterRegex, live
 		}
 	}
 
-	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password})
+	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password, InsecureSkipVerify: insecureSkipVerify})
 	if err != nil {
 		return
 	}

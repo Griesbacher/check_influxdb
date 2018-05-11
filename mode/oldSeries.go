@@ -12,7 +12,7 @@ import (
 )
 
 //OldSeries will check for old series
-func OldSeries(address, database, username, password, warning, critical string, timerange int) (err error) {
+func OldSeries(address, database, username, password string, insecureSkipVerify bool, warning, critical string, timerange int) (err error) {
 	warn, err := check_x.NewThreshold(warning)
 	if err != nil {
 		return
@@ -23,7 +23,7 @@ func OldSeries(address, database, username, password, warning, critical string, 
 		return
 	}
 
-	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password})
+	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password, InsecureSkipVerify: insecureSkipVerify})
 	if err != nil {
 		return
 	}

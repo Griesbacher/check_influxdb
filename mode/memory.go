@@ -9,7 +9,7 @@ import (
 )
 
 //Memory will check the RSS usage
-func Memory(address, username, password, warning, critical string) (err error) {
+func Memory(address, username, password string, insecureSkipVerify bool, warning, critical string) (err error) {
 	warn, err := check_x.NewThreshold(warning)
 	if err != nil {
 		return
@@ -20,7 +20,7 @@ func Memory(address, username, password, warning, critical string) (err error) {
 		return
 	}
 
-	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password})
+	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password, InsecureSkipVerify: insecureSkipVerify})
 	if err != nil {
 		return
 	}

@@ -12,13 +12,13 @@ import (
 )
 
 //NumSeries checks the amount of series and measurements
-func NumSeries(address, username, password, warning, critical, filterRegex string) (err error) {
+func NumSeries(address, username, password string, insecureSkipVerify bool, warning, critical, filterRegex string) (err error) {
 	thresholds, err := helper.ParseCommaThresholds(warning, critical)
 	if err != nil {
 		return
 	}
 
-	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password})
+	c, err := client.NewHTTPClient(client.HTTPConfig{Addr: address, Username: username, Password: password, InsecureSkipVerify: insecureSkipVerify})
 	if err != nil {
 		return
 	}
